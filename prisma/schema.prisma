@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Movie {
+  id            Int       @id @default(autoincrement()) // ID for the DB
+  tmdbId        Int       @unique // TMDB movie ID
+  title         String
+  overview      String?   
+  releaseDate   DateTime? 
+  posterPath    String?   // poster image path from TMDB
+  backdropPath  String?   // backdrop image path from TMDB
+  genres        Genre[]   @relation("MovieGenres") 
+  reviews       Review[]  
+  favorites     Favorite[] 
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Genre {
+  id       Int       @id @default(autoincrement())
+  tmdbId   Int       @unique // TMDB genre ID
+  name     String
+  movies   Movie[]   @relation("MovieGenres")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  reviews   Review[]  
+  favorites Favorite[] 
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Review {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  user      User      @relation(fields: [userId], references: [id])
+  movie     Movie     @relation(fields: [movieId], references: [id])
+  rating    Int       
+  comment   String?   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([userId, movieId]) 
+}
+
+model Favorite {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  user      User      @relation(fields: [userId], references: [id])
+  movie     Movie     @relation(fields: [movieId], references: [id])
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, movieId]) 
+}
