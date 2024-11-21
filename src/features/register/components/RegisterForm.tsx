@@ -50,6 +50,7 @@ export function RegisterForm() {
             </ul>
           </div>
         )}
+        <span className='text-sm text-red-500'>{state?.message}</span>
         <Button aria-disabled={isPending} type='submit' className='mt-2 w-full'>
           {isPending ? 'Submitting...' : 'Register'}
         </Button>
