@@ -11,6 +11,7 @@ export async function register(state: FormState, formData: FormData): Promise<Fo
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
+    confirmPassword: formData.get('confirmPassword'),
   })
 
   if (!validatedFields.success) {

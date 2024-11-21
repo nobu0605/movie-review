@@ -1,14 +1,13 @@
 'use client'
 
 import { useActionState } from 'react'
-import { useFormStatus } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { register } from '@/features/register/serverActions/register'
 
 export function RegisterForm() {
-  const [state, action] = useActionState(register, undefined)
+  const [state, action, isPending] = useActionState(register, undefined)
 
   return (
     <form action={action}>
@@ -37,18 +36,24 @@ export function RegisterForm() {
             </ul>
           </div>
         )}
-        <RegisterButton />
+        <div>
+          <Label htmlFor='confirmPassword'>Confirm Password</Label>
+          <Input id='confirmPassword' name='confirmPassword' type='password' />
+        </div>
+        {state?.errors?.confirmPassword && (
+          <div className='text-sm text-red-500'>
+            <p>confirmPassword must:</p>
+            <ul>
+              {state.errors.confirmPassword.map((error: string) => (
+                <li key={error}>- {error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <Button aria-disabled={isPending} type='submit' className='mt-2 w-full'>
+          {isPending ? 'Submitting...' : 'Register'}
+        </Button>
       </div>
     </form>
-  )
-}
-
-export function RegisterButton() {
-  const { pending } = useFormStatus()
-
-  return (
-    <Button aria-disabled={pending} type='submit' className='mt-2 w-full'>
-      {pending ? 'Submitting...' : 'Register'}
-    </Button>
   )
 }
