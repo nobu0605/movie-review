@@ -10,7 +10,7 @@ const passwordSchema = z
   })
   .trim()
 
-export const SignupFormSchema = z
+export const RegisterFormSchema = z
   .object({
     name: z.string().min(2, { message: 'Name must be at least 2 characters long.' }).trim(),
     email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
