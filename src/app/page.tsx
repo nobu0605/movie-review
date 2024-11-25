@@ -1,8 +1,10 @@
+import React from 'react'
+import { Movies } from '@/features/home/Movies'
+
 export default function Home() {
   return (
     <div>
-      <h1>Home</h1>
-      <p>Welcome to the Home page!</p>
+      <Movies />
     </div>
   )
 }
