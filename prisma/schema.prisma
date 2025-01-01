@@ -14,29 +14,6 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Movie {
-  id            Int       @id @default(autoincrement()) // ID for the DB
-  tmdbId        Int       @unique // TMDB movie ID
-  title         String
-  overview      String?   
-  releaseDate   DateTime? 
-  posterPath    String?   // poster image path from TMDB
-  backdropPath  String?   // backdrop image path from TMDB
-  genres        Genre[]   @relation("MovieGenres") 
-  reviews       Review[]  
-  favorites     Favorite[] 
-
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
-
-model Genre {
-  id       Int       @id @default(autoincrement())
-  tmdbId   Int       @unique // TMDB genre ID
-  name     String
-  movies   Movie[]   @relation("MovieGenres")
-}
-
 model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
@@ -54,7 +31,6 @@ model Review {
   userId    Int
   movieId   Int
   user      User      @relation(fields: [userId], references: [id])
-  movie     Movie     @relation(fields: [movieId], references: [id])
   rating    Int       
   comment   String?   
   createdAt DateTime  @default(now())
@@ -68,7 +44,6 @@ model Favorite {
   userId    Int
   movieId   Int
   user      User      @relation(fields: [userId], references: [id])
-  movie     Movie     @relation(fields: [movieId], references: [id])
   createdAt DateTime  @default(now())
 
   @@unique([userId, movieId]) 

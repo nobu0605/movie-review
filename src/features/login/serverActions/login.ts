@@ -1,5 +1,4 @@
 'use server'
-
 import bcrypt from 'bcrypt'
 import { FormState, LoginFormSchema } from '@/features/login/schema'
 import prisma from '@/utils/api/db'
