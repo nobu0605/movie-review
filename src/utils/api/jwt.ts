@@ -27,6 +27,21 @@ export const verifyJwt = async (token: string): Promise<JWTPayload> => {
   return payload as JWTPayload
 }
 
+export async function verifySession() {
+  try {
+    const cookie = await cookies()
+    const token = cookie.get('session')?.value || ''
+    const session = await verifyJwt(token)
+    if (!session?.id) {
+      return { isAuth: false }
+    }
+
+    return { isAuth: true, userId: Number(session.id) }
+  } catch (error) {
+    return { isAuth: false }
+  }
+}
+
 export async function createSession(userId: string) {
   const session = await signJwt({ id: userId })
   const cookie = await cookies()
@@ -38,4 +53,10 @@ export async function createSession(userId: string) {
   })
 
   await redirect('/')
+}
+
+export async function deleteSession() {
+  const cookie = await cookies()
+  cookie.delete('session')
+  await redirect('/login')
 }

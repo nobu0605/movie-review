@@ -1,17 +1,17 @@
 import Image from 'next/image'
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { getMovies } from '@/features/home/helpers/getMovies'
+import { getMovies } from '@/features/movie/helpers/movie'
 import { Movie, Result } from '@/types/movie'
 
 export async function Movies() {
-  const movies: Movie = await getMovies()
+  const movies: Movie | null = await getMovies()
 
   return (
     <div className='p-4'>
       <h1 className='text-4xl'>Movies</h1>
       <ul className='flex flex-wrap gap-8 p-4'>
-        {movies.results.map((movie: Result) => (
+        {movies?.results.map((movie: Result) => (
           <div key={movie.id}>
             <Card className='w-[380px]'>
               <CardHeader>
