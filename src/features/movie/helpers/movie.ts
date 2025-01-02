@@ -1,5 +1,5 @@
 import 'server-only'
-import { Movie, Result, MovieDetail } from '@/types/movie'
+import { Movie, Result, MovieDetail, MovieReviewFromDB } from '@/types/movie'
 import prisma from '@/utils/api/db'
 import { verifySession } from '@/utils/api/jwt'
 
@@ -17,7 +17,7 @@ export async function getMovies(): Promise<Movie | null> {
     },
   }
 
-  const res = await fetch(url, options)
+  const res = await fetch(url, { ...options, cache: 'force-cache' })
   const data = await res.json()
 
   return data
@@ -38,12 +38,34 @@ export async function getMovieDetails(movieResults: Result[]): Promise<MovieDeta
       movieId: {
         in: movieIds,
       },
+      userId: session.userId,
     },
   })
 
+  const reviews: MovieReviewFromDB[] = await prisma.$queryRaw`
+    SELECT 
+      "movieId",
+      AVG("rating") AS "averageRating",
+      ARRAY_AGG("comment") AS "comments"
+    FROM "Review"
+    WHERE "movieId" = ANY (ARRAY[${movieIds}]::integer[])
+    GROUP BY "movieId";
+  `
+
   const movieDetails = movieResults.map((movie) => {
     const isFavorite = favorites.some((favorite) => favorite.movieId === movie.id)
-    return { ...movie, isFavorite }
+    const movieReviews = reviews
+      .filter((review) => review.movieId === movie.id)
+      .map((review) => ({
+        averageRating: review.averageRating.toNumber(),
+        comments: review.comments,
+        movieId: review.movieId,
+      }))
+    return {
+      ...movie,
+      isFavorite,
+      reviews: movieReviews[0],
+    }
   })
 
   return movieDetails
