@@ -1,3 +1,5 @@
+import { Decimal } from '@prisma/client/runtime/library'
+
 export type Result = {
   adult: boolean
   backdrop_path: string
@@ -22,6 +24,19 @@ export type Movie = {
   total_results: number
 }
 
+export type MovieReviewFromDB = {
+  movieId: number
+  averageRating: Decimal
+  comments: string[]
+}
+
+export type MovieReview = {
+  movieId: number
+  averageRating: number
+  comments: string[]
+}
+
 export type MovieDetail = Result & {
+  reviews: MovieReview
   isFavorite: boolean
 }
