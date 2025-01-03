@@ -3,9 +3,9 @@ import { getMovie } from '@/features/movie/helpers/movie'
 import { getUser } from '@/features/user/helpers/user'
 
 type MoviePageProps = {
-  params: {
+  params: Promise<{
     movieId: string
-  }
+  }>
 }
 
 export default async function MovieDetailPage({ params }: MoviePageProps) {
