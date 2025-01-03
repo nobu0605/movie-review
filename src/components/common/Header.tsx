@@ -1,9 +1,10 @@
 'use client'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useActionState } from 'react'
 import { Menubar, MenubarContent, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar'
 import { logout } from '@/features/logout/serverActions/logout'
-import { User } from '@/features/user/helpers/user'
+import { User } from '@/features/user/types/user'
 
 type Props = {
   user: User | null
@@ -20,8 +21,13 @@ export function Header({ user }: Props) {
 
   return (
     <header className='h-16 bg-gray-800 text-white flex items-center flex-row-reverse'>
-      <div className='mr-6'>
-        <Menubar className='bg-gray-800 border-0'>
+      <div className='mr-6 w-full'>
+        <Menubar className='bg-gray-800 border-0 flex justify-between w-full'>
+          <MenubarMenu>
+            <Link href='/'>
+              <span className='ml-4'>Home</span>
+            </Link>
+          </MenubarMenu>
           <MenubarMenu>
             <MenubarTrigger>▾ {user?.name}</MenubarTrigger>
             <MenubarContent>

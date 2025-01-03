@@ -14,14 +14,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { review } from '@/features/review/serverActions/review'
+import { createReview } from '@/features/review/serverActions/review'
 
 type Props = {
   movieId: number
 }
 
 export function ReviewDialog({ movieId }: Props) {
-  const [state, action, isPending] = useActionState(review, undefined)
+  const [state, action, isPending] = useActionState(createReview, undefined)
   const isSuccess = (state?.message && !state?.errors) || false
   const [open, setOpen] = useState(false)
   const router = useRouter()
@@ -31,7 +31,7 @@ export function ReviewDialog({ movieId }: Props) {
       setTimeout(() => {
         setOpen(false)
         router.refresh()
-      }, 1000)
+      }, 500)
     }
   }, [isSuccess])
 
