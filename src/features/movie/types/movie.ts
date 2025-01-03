@@ -24,10 +24,9 @@ export type Movie = {
   total_results: number
 }
 
-export type MovieReviewFromDB = {
+export type AverageRating = {
   movieId: number
   averageRating: Decimal
-  comments: string[]
 }
 
 export type Review = {
@@ -38,7 +37,13 @@ export type Review = {
   }
   userId: number
   rating?: number
-  comment: string | null
+  comment?: string | null
+}
+
+export type Favorite = {
+  id: number
+  movieId: number
+  userId: number
 }
 
 export type MovieDetail = MovieResult & {
