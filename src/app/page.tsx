@@ -14,7 +14,8 @@ export default async function Home({ searchParams }: Props) {
   if (!parsedSearchParams.success) {
     return <p>Error: Invalid search parameters.</p>
   }
-  const page = parsedSearchParams.data.page || 1
+  const inialPage = 1
+  const page = parsedSearchParams.data.page || inialPage
 
   const user = await getUser()
   const movies = await getMovies(page)
