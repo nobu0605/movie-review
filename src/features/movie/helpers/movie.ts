@@ -75,12 +75,11 @@ export async function getMovie(movieId: number): Promise<MovieDetail | null> {
   }
 }
 
-export async function getMovies(): Promise<MovieDetail[] | null> {
+export async function getMovies(page: number): Promise<MovieDetail[] | null> {
   const session = await verifySession()
   if (!session.isAuth) return null
 
-  const url =
-    'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc'
+  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`
   const options = {
     method: 'GET',
     headers: {
