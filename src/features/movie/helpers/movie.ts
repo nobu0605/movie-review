@@ -66,11 +66,14 @@ export async function getMovie(movieId: number): Promise<MovieDetail | null> {
   })
 
   const isFavorite = favorites.some((favorite) => favorite.movieId === movie.id)
+  const averageRatingNumber = averageRating[0]
+    ? Math.ceil(averageRating[0].averageRating.toNumber() * 10) / 10
+    : undefined
 
   return {
     ...movie,
     isFavorite,
-    averageRating: averageRating[0].averageRating.toNumber(),
+    averageRating: averageRatingNumber,
     reviews: reviews,
   }
 }
@@ -135,11 +138,14 @@ export async function getMovies(page: number): Promise<MovieDetail[] | null> {
     const isFavorite = favorites.some((favorite) => favorite.movieId === movie.id)
     const movieReviews = reviews.filter((review) => review.movieId === movie.id)
     const averageRating = averageRatings.find((rating) => rating.movieId === movie.id)
+    const averageRatingNumber = averageRating
+      ? Math.ceil(averageRating.averageRating.toNumber() * 10) / 10
+      : undefined
 
     return {
       ...movie,
       isFavorite,
-      averageRating: averageRating ? averageRating.averageRating.toNumber() : undefined,
+      averageRating: averageRatingNumber,
       reviews: movieReviews,
     }
   })
