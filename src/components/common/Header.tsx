@@ -26,7 +26,7 @@ export function Header({ user }: Props) {
           <div>
             <MenubarMenu>
               <Link href='/'>
-                <span className='ml-4'>Home</span>
+                <span className='ml-4'>Movie Review</span>
               </Link>
             </MenubarMenu>
             <MenubarMenu>
