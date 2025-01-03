@@ -75,7 +75,6 @@ export async function disfavor(state: FormState, formData: FormData): Promise<Fo
       },
     }
   }
-  const userId = session.userId
 
   const validatedFields = favoriteFormSchema.safeParse({
     movieId,
@@ -91,7 +90,7 @@ export async function disfavor(state: FormState, formData: FormData): Promise<Fo
     await prisma.favorite.delete({
       where: {
         userId_movieId: {
-          userId,
+          userId: session.userId,
           movieId,
         },
       },
