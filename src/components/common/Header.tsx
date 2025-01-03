@@ -23,11 +23,18 @@ export function Header({ user }: Props) {
     <header className='h-16 bg-gray-800 text-white flex items-center flex-row-reverse'>
       <div className='mr-6 w-full'>
         <Menubar className='bg-gray-800 border-0 flex justify-between w-full'>
-          <MenubarMenu>
-            <Link href='/'>
-              <span className='ml-4'>Home</span>
-            </Link>
-          </MenubarMenu>
+          <div>
+            <MenubarMenu>
+              <Link href='/'>
+                <span className='ml-4'>Home</span>
+              </Link>
+            </MenubarMenu>
+            <MenubarMenu>
+              <Link href='/mypage'>
+                <span className='ml-4'>Mypage</span>
+              </Link>
+            </MenubarMenu>
+          </div>
           <MenubarMenu>
             <MenubarTrigger>▾ {user?.name}</MenubarTrigger>
             <MenubarContent>
