@@ -1,21 +1,20 @@
 import React from 'react'
 import { MovieCard } from '@/features/movie/components/MovieCard'
-import { getMovies, getMovieDetails } from '@/features/movie/helpers/movie'
-import { Movie, MovieDetail } from '@/types/movie'
+import { MovieDetail } from '@/features/movie/types/movie'
+import { User } from '@/features/user/types/user'
 
-export async function Movies() {
-  const movies: Movie | null = await getMovies()
-  if (!movies) return <span>no data</span>
+type Props = {
+  movies: MovieDetail[]
+  user: User
+}
 
-  const movieDetails = await getMovieDetails(movies.results)
-  if (!movieDetails) return <span>no data</span>
-
+export async function Movies({ movies, user }: Props) {
   return (
     <div className='p-4'>
       <h1 className='text-4xl'>Movies</h1>
       <ul className='flex flex-wrap gap-8 p-4'>
-        {movieDetails.map((movie: MovieDetail) => (
-          <MovieCard key={movie.id} movie={movie} />
+        {movies.map((movie: MovieDetail) => (
+          <MovieCard className='sm:w-[23%] w-[100%]' key={movie.id} movie={movie} user={user} />
         ))}
       </ul>
     </div>

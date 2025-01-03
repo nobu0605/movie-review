@@ -1,10 +1,6 @@
+import { User } from '@/features/user/types/user'
 import prisma from '@/utils/api/db'
 import { verifySession } from '@/utils/api/jwt'
-
-export type User = {
-  id: number
-  name: string
-}
 
 export async function getUser(): Promise<User | null> {
   const session = await verifySession()
