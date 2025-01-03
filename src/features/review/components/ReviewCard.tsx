@@ -1,5 +1,4 @@
 'use client'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
 import { useEffect } from 'react'
@@ -35,9 +34,7 @@ export function ReviewCard({ review, className, user }: Props) {
       <Card>
         <CardHeader>
           <div className='flex justify-between'>
-            <Link href={`/movie/${review.userId}`}>
-              <CardTitle>{review.user?.name}</CardTitle>
-            </Link>
+            <CardTitle>{review.user?.name}</CardTitle>
             {isUserReview && (
               <Popover>
                 <PopoverTrigger>&#65049;</PopoverTrigger>

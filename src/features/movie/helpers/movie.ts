@@ -147,3 +147,81 @@ export async function getMovies(): Promise<MovieDetail[] | null> {
 
   return movieDetails
 }
+
+export async function getFavoriteMovies(): Promise<MovieDetail[] | null> {
+  const session = await verifySession()
+  if (!session.isAuth) return null
+
+  const favorites = await prisma.favorite.findMany({
+    select: {
+      id: true,
+      movieId: true,
+      userId: true,
+    },
+    where: {
+      userId: session.userId,
+    },
+  })
+
+  const favoriteMovieIds = favorites.map((favorite) => favorite.movieId)
+  let favoriteMovies: MovieResult[] = []
+  try {
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+      },
+    }
+
+    const movieRequests = favoriteMovieIds.map((movieId) =>
+      fetch(`https://api.themoviedb.org/3/movie/${movieId}`, {
+        ...options,
+        cache: 'force-cache',
+      }).then((res) => res.json()),
+    )
+    const movies: MovieResult[] = await Promise.all(movieRequests)
+    favoriteMovies = movies
+  } catch (error) {
+    console.error('Error fetching movies:', error)
+  }
+  if (favoriteMovies.length === 0) return null
+
+  const averageRatings: MovieReviewFromDB[] = await prisma.$queryRaw`
+    SELECT 
+      "movieId",
+      AVG("rating") AS "averageRating"
+    FROM "Review"
+    WHERE "movieId" = ANY (ARRAY[${favoriteMovieIds}]::integer[])
+    GROUP BY "movieId";
+  `
+
+  const reviews: Review[] | null = await prisma.review.findMany({
+    select: {
+      id: true,
+      comment: true,
+      movieId: true,
+      userId: true,
+    },
+    where: {
+      movieId: {
+        in: favoriteMovieIds,
+      },
+    },
+  })
+
+  const movieDetails = favoriteMovies.map((movie) => {
+    const isFavorite = favorites.some((favorite) => favorite.movieId === movie.id)
+    const movieReviews = reviews.filter((review) => review.movieId === movie.id)
+    const averageRating = averageRatings.find((rating) => rating.movieId === movie.id)
+
+    return {
+      ...movie,
+      isFavorite,
+      averageRating: averageRating ? averageRating.averageRating.toNumber() : undefined,
+      reviews: movieReviews,
+    }
+  })
+
+  return movieDetails
+}
