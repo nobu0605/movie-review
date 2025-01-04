@@ -1,3 +1,4 @@
+import 'server-only'
 import { User } from '@/features/user/types/user'
 import prisma from '@/utils/api/db'
 import { verifySession } from '@/utils/api/jwt'
