@@ -3,14 +3,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useActionState } from 'react'
 import { Menubar, MenubarContent, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar'
+import { publicRoutes } from '@/constants/route'
 import { logout } from '@/features/logout/serverActions/logout'
 import { User } from '@/features/user/types/user'
 
 type Props = {
   user: User | null
 }
-
-const publicRoutes = ['/login', '/register']
 
 export function Header({ user }: Props) {
   const [_, action, isPending] = useActionState(logout, undefined)
