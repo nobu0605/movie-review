@@ -1,8 +1,7 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { publicRoutes } from './constants/route'
 import { verifyJwt } from './utils/api/jwt'
-
-const publicRoutes = ['/login', '/register']
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
