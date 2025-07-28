@@ -12,7 +12,7 @@ export function Footer() {
     <p className='text-center mb-4 mt-4 text-xs'>
       This product uses the TMDB API but is not endorsed or certified by TMDB.
       <br />
-      <a href='https://www.themoviedb.org' target='_blank'>
+      <a href='https://www.themoviedb.org' target='_blank' rel='noopener noreferrer'>
         The Movie Database (TMDB)
       </a>
     </p>
