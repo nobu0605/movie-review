@@ -31,11 +31,28 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    await prisma.$queryRaw`SELECT 1`
+    const checkedAt = new Date().toISOString()
+    const user = await prisma.user.findFirst({
+      select: {
+        id: true,
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    })
+
+    console.log('KEEPALIVE_DB_OK', {
+      checkedAt,
+      hasUser: user !== null,
+    })
 
     return NextResponse.json({
       ok: true,
-      timestamp: new Date().toISOString(),
+      db: {
+        checked: true,
+        hasUser: user !== null,
+      },
+      timestamp: checkedAt,
     })
   } catch (error) {
     console.error('keepalive failed:', error)
